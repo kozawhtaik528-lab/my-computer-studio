@@ -28,29 +28,57 @@ export default function Home() {
   ];
 
   return (
-    <main style={{ padding: "40px" }}>
-      <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>
-        🎓 My Computer Studio Training သင်တန်းများ
+    <div style={{ padding: "30px" }}>
+      <h1
+        style={{
+          fontSize: "32px",
+          marginBottom: "25px",
+          fontWeight: "bold",
+          color: "#222",
+          textAlign: "center",
+        }}
+      >
+        🎓 My Computer Studio & Training သင်တန်းများ
       </h1>
 
-      <div style={{ display: "grid", gap: "20px" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "25px",
+        }}
+      >
         {courses.map((course) => (
           <a
             key={course.id}
             href={`/courses/${course.id}`}
+            className="course-card"
             style={{
               padding: "20px",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
+              border: "1px solid #ddd",
+              borderRadius: "10px",
               textDecoration: "none",
-              color: "#000",
+              color: "#111",
+              background: "white",
+              transition: "0.25s",
             }}
           >
-            <h2>{course.title}</h2>
-            <p>{course.description}</p>
+            <h2 style={{ fontSize: "22px", marginBottom: "10px" }}>
+              {course.title}
+            </h2>
+            <p style={{ fontSize: "16px", color: "#555" }}>
+              {course.description}
+            </p>
           </a>
         ))}
       </div>
-    </main>
+
+      <style>{`
+        .course-card:hover {
+          transform: scale(1.03);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.20);
+        }
+      `}</style>
+    </div>
   );
 }

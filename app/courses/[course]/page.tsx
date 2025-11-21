@@ -94,10 +94,10 @@
 import { supabase } from "@/lib/supabase/server";
 
 export default async function CoursePage({ params }: any) {
+  const p = await params;
+  const courseSlug = p.course;
 
-  const p = await params;          // ✅ FIX
-  const courseSlug = p.course;     // correct
-  const supa = await supabase();   // supabase client
+  const supa = await supabase();
 
   const { data: lessons } = await supa
     .from("lessons")
@@ -106,27 +106,63 @@ export default async function CoursePage({ params }: any) {
     .order("order_number", { ascending: true });
 
   if (!lessons || lessons.length === 0) {
-    return <div>No lessons found</div>;
+    return <div style={{ padding: 30 }}>No lessons found</div>;
   }
 
   return (
-    <div style={{ padding: 30 }}>
-      <h1 style={{ fontSize: 28, fontWeight: "bold" }}>
-        Lessons for {courseSlug}
+    <div style={{ padding: "30px", maxWidth: 800, margin: "0 auto" }}>
+      <h1 style={{ fontSize: 32, fontWeight: "bold" }}>
+        📘 {courseSlug.replace("-", " ").toUpperCase()}
       </h1>
 
-      <ul style={{ marginTop: 20 }}>
+      <p style={{ fontSize: 18, marginTop: 10 }}>
+        ဒီသင်တန်းမှာ စုစုပေါင်း {lessons.length} သင်ခန်းစာရှိပါတယ်။
+      </p>
+
+      {/* Start Course Button */}
+      <a
+        href={`/courses/${courseSlug}/1`}
+        style={{
+          display: "inline-block",
+          marginTop: 20,
+          padding: "12px 20px",
+          background: "#0070f3",
+          color: "white",
+          borderRadius: 8,
+          fontSize: 18,
+          textDecoration: "none",
+          fontWeight: "bold",
+        }}
+      >
+        🚀 Start Course
+      </a>
+
+      <hr style={{ margin: "30px 0" }} />
+
+      <h2 style={{ fontSize: 24, marginBottom: 10 }}>📚 Lessons</h2>
+
+      {/* Lesson List */}
+      <div style={{ display: "grid", gap: 15 }}>
         {lessons.map((l: any) => (
-          <li key={l.id} style={{ marginBottom: 10 }}>
-            <a
-              href={`/courses/${courseSlug}/${l.order_number}`}
-              style={{ color: "blue", textDecoration: "underline" }}
-            >
-              Lesson {l.order_number} – {l.title}
-            </a>
-          </li>
+          <a
+            key={l.order_number}
+            href={`/courses/${courseSlug}/${l.order_number}`}
+            style={{
+              padding: 15,
+              border: "1px solid #ddd",
+              borderRadius: 8,
+              textDecoration: "none",
+              color: "#333",
+              background: "white",
+              display: "block",
+            }}
+          >
+            <h3 style={{ margin: 0, fontSize: 20 }}>
+              Lesson {l.order_number}: {l.title}
+            </h3>
+          </a>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
